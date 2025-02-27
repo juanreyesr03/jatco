@@ -1,0 +1,17 @@
+{
+    "name": "reyes/ticket_mike42",
+    "autoload": {
+        "psr-4": {
+            "Reyes\\TicketMike42\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "juanreyesr03",
+            "email": "juan.reyesr03@iea.edu.mx"
+        }
+    ],
+    "require": {
+        "mike42/escpos-php": "^4.0"
+    }
+}
