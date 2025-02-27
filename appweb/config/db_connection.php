@@ -1,8 +1,8 @@
 <?php
     $host = "localhost";
-    $user = "prueba_beta";
-    $password = "(]wyUV*rT*p.eaPl";
-    $database = "payconnect_goldenred_copia";
+    $user = "root";
+    $password = "";
+    $database = "jatco_copia";
 
     date_default_timezone_set('America/Mexico_City');
     

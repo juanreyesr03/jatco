@@ -30,7 +30,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>GoldenRed - Dashboard</title>
+    <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -53,9 +53,9 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../views/dashboard.php">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                    <i class="fas fa-cogs"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">GoldenRed</div>
+                <div class="sidebar-brand-text mx-3">JATCO</div>
             </a>
 
             <!-- Divider -->
@@ -93,171 +93,7 @@
             </li>
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Internet
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSix"
-                    aria-expanded="true" aria-controls="collapseSix">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Internet</span>
-                </a>
-                <div id="collapseSix" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Paquetes de Internet:</h6>
-                        <a class="collapse-item" href="internet_venta.php">Generar Venta</a>
-                        <a class="collapse-item" href="internet_venta_historico.php">Historial de Ventas</a>
-                        <?php 
-                            if($_SESSION['rol'] == 'Administrador'){
-                        ?>
-                            <a class="collapse-item" href="internet.php">Paquetes Internet</a>
-                        <?php
-                            }
-                        ?>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Resumen Ventas
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Ventas</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Datos de las Ventas:</h6>
-                        <a class="collapse-item" href="corte_dia.php">Corte del Día</a>
-                    </div>
-                </div>
-            </li>
-            
-            <?php 
-                $activar = 1;
-                if($activar == 0){
-                    if($_SESSION['rol'] == 'Administrador'){
-            ?>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSeven"
-                    aria-expanded="true" aria-controls="collapseSeven">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Plataformas</span>
-                </a>
-                <div id="collapseSeven" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registros de Plataformas:</h6>
-                        <a class="collapse-item" href="plataforma.php">Plataformas</a>
-                        <a class="collapse-item" href="plataforma_correo.php">Correos</a>
-                        <a class="collapse-item" href="plataforma_perfil.php">Perfiles</a>
-                        <a class="collapse-item" href="plataforma_venta.php">Generar Venta</a>
-                        <a class="collapse-item" href="plataforma_venta_historico.php">Historial de Ventas</a>
-                    </div>
-                </div>
-            </li>
-            <?php
-                    }
-            ?>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Almacen
-            </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
-                    aria-expanded="true" aria-controls="collapseFour">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Paneles</span>
-                </a>
-                <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registros de Panel:</h6>
-                        <a class="collapse-item" href="">Registrar</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
-                    aria-expanded="true" aria-controls="collapseFive">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Enlaces</span>
-                </a>
-                <div id="collapseFive" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registros de Enlaces:</h6>
-                        <a class="collapse-item" href="">Registrar</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEight"
-                    aria-expanded="true" aria-controls="collapseEight">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Almacen</span>
-                </a>
-                <div id="collapseEight" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Registros de Material:</h6>
-                        <a class="collapse-item" href="">Almacen</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Nomina
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Nomina Personal</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Datos del Personal:</h6>
-                        <a class="collapse-item" href="">Nomina</a>
-                        <a class="collapse-item" href="">Puesto</a>
-                        <a class="collapse-item" href="">Persona</a>
-                        <a class="collapse-item" href="">Datos Personal</a>
-                    </div>
-                </div>
-            </li>
-
-            <?php
-                }
-            ?>
-
-            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
-
             
 
             <!-- Sidebar Toggler (Sidebar) -->
@@ -444,7 +280,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['nombre']; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="../img/undraw_profile.svg">
                             </a>

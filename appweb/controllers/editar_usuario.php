@@ -27,7 +27,7 @@ try {
     error_log("Datos recibidos: " . json_encode($input)); // Registra los datos recibidos en el log del servidor para inspección
 
     // Preparar la consulta
-    $query = "CALL editar_usuario(?, ?, ?, ?, ?, ?)";
+    $query = "CALL editar_usuario(?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
 
     if (!$stmt) {
@@ -36,13 +36,14 @@ try {
 
     // Vincular los parámetros con los valores del formulario
     $stmt->bind_param(
-        "issssi", // Los tipos de los parámetros (i = int, s = string)
+        "issssii", // Los tipos de los parámetros (i = int, s = string)
         $input['id_usuario'],
         $input['nombre'],
         $input['correo'],
         $input['usuario'],
         $input['pwd'],
-        $input['rol']
+        $input['rol'],
+        $input['area']
     );
 
     // Ejecutar la consulta

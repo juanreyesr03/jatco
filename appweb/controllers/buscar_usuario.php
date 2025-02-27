@@ -7,7 +7,7 @@
             $id = $_GET['id'];
 
             // Verificar si el usuario existe
-            $verificar_usuario = "call buscar_usuario_id(?)";
+            $verificar_usuario = "call mostrar_usuario_id(?)";
             if ($stmt_verificar = $conn->prepare($verificar_usuario)) {
                 $stmt_verificar->bind_param("i", $id);
                 $stmt_verificar->execute();
@@ -22,8 +22,11 @@
                         $usuario,
                         $pwd,
                         $id_estado, 
+                        $estado,
                         $id_rol,
-                        $descripcion
+                        $rol,
+                        $id_area,
+                        $area
                     );
 
                     // Recuperar los datos del usuario
@@ -39,8 +42,11 @@
                             'usuario' => $usuario,
                             'pwd' => $pwd,
                             'id_estado' => $id_estado,
+                            'estado' => $estado,
                             'id_rol' => $id_rol,
-                            'descripcion' => $descripcion
+                            'rol' => $rol,
+                            'id_area' => $id_area,
+                            'area' => $area
                         ]
                     ]);
                 } else {

@@ -29,7 +29,6 @@
             $_SESSION['nombre'] = $row['nombre'];
             $_SESSION['idRol'] = $row['id_rol'];
             $_SESSION['rol'] = $row['descripcion_rol'];
-            $_SESSION['area'] = $row['id_area_usuario'];
             $_SESSION['status'] = $row['id_estado'];
 
             //Variables del SP

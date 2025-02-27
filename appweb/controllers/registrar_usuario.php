@@ -13,30 +13,13 @@
         exit();
     }
 
-    // Verificar si todas las variables POST están definidas
-    $missing_fields = [];
-    if (!isset($_POST['nombre'])) $missing_fields[] = 'S/D';
-    if (!isset($_POST['correo'])) $missing_fields[] = 'S/D';
-    if (!isset($_POST['usuario'])) $missing_fields[] = 'S/D';
-    if (!isset($_POST['pwd'])) $missing_fields[] = 'S/D';
-    if (!isset($_POST['rol'])) $missing_fields[] = 'S/D';
-
-    if (!empty($missing_fields)) {
-        echo json_encode([
-            'success' => false,
-            'message' => 'Faltan datos en la solicitud',
-            'missing_fields' => $missing_fields
-        ]);
-        exit();
-    }
-
-
     // Capturar los valores del formulario
     $nombre = trim($_POST['nombre']);
     $correo = trim($_POST['correo']);
     $usuario = trim($_POST['usuario']);
     $pwd = trim($_POST['pwd']);
-    $rol = intval($_POST['rol']); // Asegura que el rol sea un número
+    $rol = intval($_POST['rol']);
+    $area = intval($_POST['area']);
 
     try {
         // Verificar si el usuario ya existe
@@ -61,13 +44,13 @@
         $checkStmt->close();
 
         // Preparar la inserción
-        $query = "CALL insertar_usuario(?, ?, ?, ?, ?)";
+        $query = "CALL insertar_usuario(?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         if (!$stmt) {
             throw new Exception("Error en la consulta de inserción: " . $conn->error);
         }
 
-        $stmt->bind_param("ssssi", $nombre, $correo, $usuario, $pwd, $rol);
+        $stmt->bind_param("ssssii", $nombre, $correo, $usuario, $pwd, $rol, $area);
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {

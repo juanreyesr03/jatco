@@ -89,13 +89,14 @@
                             <!-- Nested Row within Card Body -->
                             <div class="row">
                                 <div class="col-lg-6 d-none d-lg-block">
-                                    <img src="img/Jatco_logo.svg" alt="Login Image" style="width: 30%; height: 30%; ">
+                                    
                                 </div>                                 
                                 <div class="col-lg-6">
                                     <div class="p-5">
                                         <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">JATCO</h1>
+                                            <img src="img/Jatco_logo.svg" alt="Login Image" style="width: 30%; height: 30%; object-fit: cover;">
                                         </div>
+                                        <br>
                                         <form class="user" method="POST" action="controllers/procesar_login.php">
                                             <div class="form-group">
                                                 <input type="text" name="usuario" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Ingresa tu Usuario" required>
@@ -111,12 +112,6 @@
                                             <button type="submit" class="btn btn-primary btn-user btn-block">Login</button>
                                         </form>
                                         <hr>
-                                        <div class="text-center">
-                                            <a class="small" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
-                                        </div>
-                                        <div class="text-center">
-                                            <a class="small" href="register.html">Crear Cuenta</a>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

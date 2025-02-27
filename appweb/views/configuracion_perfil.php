@@ -18,6 +18,26 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
+                <style>
+                    /* Pendiente de Pago */
+                    .inactivo {
+                        background-color: #fff3cd; /* Amarillo claro */
+                        color: #856404;           /* Marrón oscuro */
+                        font-weight: bold;
+                        padding: 5px;
+                        border-radius: 5px;       /* Bordes redondeados */
+                        text-align: center;
+                    }
+
+                    .activo {
+                        background-color: #d4edda; /* Verde claro */
+                        color: #155724;           /* Verde oscuro */
+                        font-weight: bold;
+                        padding: 5px;
+                        border-radius: 5px;
+                        text-align: center;
+                    }
+                </style>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -26,6 +46,8 @@
                             <th>Usuario</th>
                             <th>Contraseña</th>
                             <th>Rol</th>
+                            <th>Area</th>
+                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -40,14 +62,29 @@
                                 if ($result->num_rows > 0) {
                                     // Iterar sobre los registros
                                     while ($row = $result->fetch_assoc()) {
+                                        $estadoClass = '';  // Default class
+                                        // Determine the class based on id_estado_pago
+                                        if ($row['id_estado'] == 1) {
+                                            $estadoClass = 'activo';  // Pending payment
+                                        } elseif ($row['id_estado'] == 2) {
+                                            $estadoClass = 'inactivo';   // Late payment
+                                        }
+
                                         echo "<tr>";
                                         echo "<td style='text-align: left;'>{$row['nombre']}</td>";
                                         echo "<td style='text-align: left;'>{$row['correo']}</td>";
                                         echo "<td style='text-align: left;'>{$row['usuario']}</td>";
                                         echo "<td style='text-align: left;'>{$row['pwd']}</td>";
-                                        echo "<td style='text-align: left;'>{$row['descripcion']}</td>";
+                                        echo "<td style='text-align: left;'>{$row['rol']}</td>";
+                                        echo "<td style='text-align: left;'>{$row['area']}</td>";
+                                        echo "<td class='$estadoClass'; style='text-align: left;'>{$row['estado']}</td>";
                                         echo "<td style='text-align: left;'>";
                                         echo "<a href='#formularioPerfil' class='btn btn-info btn-circle btn-sm' title='Editar' onclick='mostrarFormulario(\"" . $row['id_usuario'] . "\")'><i class='fas fa-info-circle'></i></a> ";
+                                        if($row['id_estado'] == 1){
+                                            echo "<a href='#' class='btn btn-danger btn-circle btn-sm' title='Activar' onclick='cambiarEstado(\"" . $row['id_usuario'] . "\", \"" . $row['estado'] . "\")'><i class='fa fa-power-off'></i></a> ";
+                                        }else if($row['id_estado'] == 2){
+                                            echo "<a href='#' class='btn btn-primary btn-circle btn-sm' title='Desactivar' onclick='cambiarEstado(\"" . $row['id_usuario'] . "\", \"" . $row['estado'] . "\")'><i class='fa fa-power-off'></i></a> ";
+                                        }
                                         echo "<a href='#' class='btn btn-danger btn-circle btn-sm' title='Eliminar' onclick='eliminarCliente(\"" . $row['id_usuario'] . "\")'><i class='fas fa-trash'></i></a> ";
                                         echo "</td>";
                                         echo "</tr>";
@@ -135,7 +172,7 @@
                                 <?php
                                     include '../config/db_connection.php';
                                     try {
-                                        $query_rols = "CALL configuracion_usuario_rol";
+                                        $query_rols = "CALL mostrar_configuracion_usuario_rol";
                                         $result_rols = $conn->query($query_rols);
 
                                         if ($result_rols) {
@@ -144,6 +181,35 @@
                                                 echo '<option value="">Seleccione un Rol</option>';
                                                 while ($row = $result_rols->fetch_assoc()) {
                                                     echo "<option value='{$row['id_rol']}'>{$row['descripcion']}</option>";
+                                                }
+                                                echo '</select>';
+                                            } else {
+                                                echo '<p class="text-danger">No hay registros disponibles.</p>';
+                                            }
+                                        } else {
+                                            echo '<p class="text-danger">Error al cargar rol: ' . $conn->error . '</p>';
+                                        }
+
+                                        $result_rols->free();
+                                    } catch (Exception $e) {
+                                        echo '<p class="text-danger">Error al cargar roles: ' . $e->getMessage() . '</p>';
+                                    }
+                                ?>
+                            </div>
+                            <div class="form-group">
+                                <label for="area">Área</label>
+                                <?php
+                                    include '../config/db_connection.php';
+                                    try {
+                                        $query_rols = "CALL mostrar_configuracion_area";
+                                        $result_rols = $conn->query($query_rols);
+
+                                        if ($result_rols) {
+                                            if ($result_rols->num_rows > 0) {
+                                                echo '<select name="area" id="area" class="form-control">';
+                                                echo '<option value="">Seleccione un Rol</option>';
+                                                while ($row = $result_rols->fetch_assoc()) {
+                                                    echo "<option value='{$row['id_area']}'>{$row['descripcion']}</option>";
                                                 }
                                                 echo '</select>';
                                             } else {
@@ -187,6 +253,8 @@
                 <form class="user">
                     <input type="hidden" id="id_usuario" name="id_usuario">
                     <input type="hidden" id="id_estado" name="id_estado">
+                    <input type="hidden" id="id_rol" name="id_rol">
+                    <input type="hidden" id="id_area" name="id_area">
                     <div class="form-group">
                         <label for="nombre_editar">Nombre</label>
                         <input type="text" class="form-control" id="nombre_editar" name="nombre_editar" placeholder="Nombre del Usuario" disabled>
@@ -208,15 +276,44 @@
                         <?php
                             include '../config/db_connection.php';
                             try {
-                                $query_rols = "CALL configuracion_usuario_rol";
+                                $query_rols = "CALL mostrar_configuracion_usuario_rol";
                                 $result_rols = $conn->query($query_rols);
 
                                 if ($result_rols) {
                                     if ($result_rols->num_rows > 0) {
                                         echo '<select name="rol_editar" id="rol_editar" class="form-control" disabled>';
-                                        echo '<option id="descripcion_valor" name="descripcion_valor" value=""></option>';
+                                        echo '<option id="descripcion_rol" name="descripcion_rol" value=""></option>';
                                         while ($row = $result_rols->fetch_assoc()) {
                                             echo "<option value='{$row['id_rol']}'>{$row['descripcion']}</option>";
+                                        }
+                                        echo '</select>';
+                                    } else {
+                                        echo '<p class="text-danger">No hay registros disponibles.</p>';
+                                    }
+                                } else {
+                                    echo '<p class="text-danger">Error al cargar rol: ' . $conn->error . '</p>';
+                                }
+
+                                $result_rols->free();
+                            } catch (Exception $e) {
+                                echo '<p class="text-danger">Error al cargar roles: ' . $e->getMessage() . '</p>';
+                            }
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <label for="area_editar">Área</label>
+                        <?php
+                            include '../config/db_connection.php';
+                            try {
+                                $query_rols = "CALL mostrar_configuracion_area";
+                                $result_rols = $conn->query($query_rols);
+
+                                if ($result_rols) {
+                                    if ($result_rols->num_rows > 0) {
+                                        echo '<select name="area_editar" id="area_editar" class="form-control" disabled>';
+                                        echo '<option id="descripcion_area" name="descripcion_area" value=""></option>';
+                                        while ($row = $result_rols->fetch_assoc()) {
+                                            echo "<option value='{$row['id_area']}'>{$row['descripcion']}</option>";
                                         }
                                         echo '</select>';
                                     } else {
@@ -278,17 +375,25 @@
                 if (data.success) {
                     // Completar los campos del formulario con los datos del cliente
                     document.getElementById("id_usuario").value = data.usuario.id_usuario || '';
+                    document.getElementById("id_estado").value = data.usuario.id_estado || '';
+                    document.getElementById("id_rol").value = data.usuario.id_rol || '';
+                    document.getElementById("id_area").value = data.usuario.id_area || '';
+
                     document.getElementById("nombre_editar").value = data.usuario.nombre || '';
                     document.getElementById("correo_editar").value = data.usuario.correo || '';
                     document.getElementById("usuario_editar").value = data.usuario.usuario || '';
                     document.getElementById("pwd_editar").value = data.usuario.pwd || '';
-                    document.getElementById("rol_editar").value = data.usuario.paquete_internet || '';
-                    document.getElementById("id_estado").value = data.usuario.id_estado || '';
+                    
                     // Establecer el valor del option de descripcion
-                    var descripcionValor = data.usuario.descripcion || '';
-                    var descripcionValorid = data.usuario.id_rol || '';
-                    document.getElementById("descripcion_valor").value = descripcionValorid;
-                    document.getElementById("descripcion_valor").textContent = descripcionValor; // Actualizar el texto que aparece en el option
+                    var descripcionRolid = data.usuario.id_rol || '';
+                    var descripcionRol = data.usuario.rol || '';
+                    document.getElementById("descripcion_rol").value = descripcionRolid;
+                    document.getElementById("descripcion_rol").textContent = descripcionRol;
+
+                    var descripcionAreaid = data.usuario.id_area || '';
+                    var descripcionArea = data.usuario.area || '';
+                    document.getElementById("descripcion_area").textContent = descripcionArea;
+                    document.getElementById("descripcion_area").value = descripcionAreaid;
 
                     // Muestra un mensaje de éxito
                     Swal.fire({
@@ -364,9 +469,11 @@
         var formData = new FormData(this);
 
         // Mostrar los datos en consola antes de enviarlos
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
+        /*
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ": " + pair[1]);
+            }
+        */
 
         fetch('../controllers/registrar_usuario.php', {
             method: 'POST',
@@ -374,7 +481,6 @@
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Respuesta del servidor:", data); // Verifica la respuesta del backend
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
@@ -409,6 +515,7 @@
         document.getElementById('usuario_editar').disabled = false;
         document.getElementById('pwd_editar').disabled = false;
         document.getElementById('rol_editar').disabled = false;
+        document.getElementById('area_editar').disabled = false;
 
         // Habilitar el botón "Guardar Cambios"
         document.getElementById('guardarCambios').disabled = false;
@@ -440,6 +547,7 @@
                 const usuario = document.getElementById('usuario_editar').value;
                 const pwd = document.getElementById('pwd_editar').value;
                 const rol = document.getElementById('rol_editar').value;
+                const area = document.getElementById('area_editar').value;
 
                 // Función que muestra el mensaje de advertencia
                 function showWarning(fieldName) {
@@ -457,6 +565,7 @@
                     { value: usuario, name: 'Usuario' },
                     { value: pwd, name: 'Contraseña' },
                     { value: rol, name: 'Rol' },
+                    { value: area, name: 'Area' },
                 ];
 
                 // Iterar sobre los campos y verificar si están vacíos
@@ -476,6 +585,7 @@
                     usuario: document.getElementById('usuario_editar').value,
                     pwd: document.getElementById('pwd_editar').value,
                     rol: document.getElementById('rol_editar').value,
+                    area: document.getElementById('area_editar').value
                 };
 
 
@@ -523,4 +633,66 @@
             }
         });
     }
+
+    function cambiarEstado(idCliente, idEstado) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Cambiar Estado del Usuario',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Verificar que el idCliente y idEstado no estén vacíos o inválidos
+                if (!idCliente || !idEstado) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Faltan datos',
+                        text: 'Por favor, asegúrate de que los campos de ID y Estado estén correctamente definidos.'
+                    });
+                    return; // Salir si los datos no son válidos
+                }
+
+                // Realizar la solicitud fetch para cambiar el estado
+                fetch(`../controllers/buscar_usuario_estado.php?id=${idCliente}&estado=${idEstado}`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Estado actualizado!',
+                            text: 'El estado del usuario ha sido actualizado correctamente.'
+                        }).then(() => {
+                            // Recargar si es necesario o realizar alguna acción posterior
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: data.message
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Hubo un problema al procesar la solicitud: ' + error.message
+                    });
+                });
+            }
+        });
+    }
+
 </script>
