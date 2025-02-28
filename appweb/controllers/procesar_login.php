@@ -28,8 +28,9 @@
             $_SESSION['idUser'] = $row['id_usuario'];
             $_SESSION['nombre'] = $row['nombre'];
             $_SESSION['idRol'] = $row['id_rol'];
-            $_SESSION['rol'] = $row['descripcion_rol'];
+            $_SESSION['rol'] = $row['rol_descripcion'];
             $_SESSION['status'] = $row['id_estado'];
+            $_SESSION['area'] = $row['id_area'];
 
             //Variables del SP
             $fecha = date('Y-m-d');
@@ -38,7 +39,7 @@
             //Insertar dato al iniciar Sesion
             $conn->next_result(); // Esto asegura que no haya resultados pendientes
             $stmt = $conn->prepare("CALL insertar_configuracion_ingreso(?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssis", $fecha, $ip, $hora_e, $id_usuario, $deviceType);
+            $stmt->bind_param("sssss", $fecha, $ip, $hora_e, $id_usuario, $deviceType);
             // Ejecutar la consulta
             if ($stmt->execute()) {
                 echo "Inserción exitosa";

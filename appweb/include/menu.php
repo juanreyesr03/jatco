@@ -68,9 +68,16 @@
                     <span>Dashboard</span></a>
             </li>
 
+            
+            <?php
+                $a = 1;
+
+                if($a == 2){
+            ?>
+            
             <!-- Divider -->
             <hr class="sidebar-divider">
-
+            
             <!-- Heading -->
             <div class="sidebar-heading">
                 Clientes
@@ -92,6 +99,9 @@
                 </div>
             </li>
 
+            <?php
+                }
+            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
             
