@@ -49,13 +49,18 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
+            <style>
+                .sidebar-brand-text img {
+                    max-width: 100%; /* Hace que la imagen ocupe el 100% del ancho del contenedor */
+                    height: auto; /* Mantiene la proporción de la imagen */
+                }
+            </style>
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../views/dashboard.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-cogs"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">JATCO</div>
+                <div class="sidebar-brand-text"><img src="../img/logo.png" alt=""></div>
             </a>
 
             <!-- Divider -->
@@ -67,20 +72,36 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
-
-            
-            <?php
-                $a = 1;
-
-                if($a == 2){
-            ?>
             
             <!-- Divider -->
             <hr class="sidebar-divider">
             
             <!-- Heading -->
             <div class="sidebar-heading">
-                Clientes
+                Mercancia de Proveedor
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#proveedor"
+                    aria-expanded="true" aria-controls="proveedor">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Proveedor</span>
+                </a>
+                <div id="proveedor" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Registrar Codigo:</h6>      
+                        <a class="collapse-item" href="mercancia.php">Registrar Mercancia</a>                  
+                    </div>
+                </div>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Shutter
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -88,23 +109,18 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Clientes</span>
+                    <span>Proveedor</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Datos del Cliente:</h6>
-                        <a class="collapse-item" href="clientes_registro.php">Registrar</a>
-                        <a class="collapse-item" href="clientes.php">Ver</a>
+                        <h6 class="collapse-header">Registrar Codigo:</h6>      
+                        <a class="collapse-item" href="mercancia.php">Registrar Mercancia</a>                  
                     </div>
                 </div>
             </li>
 
-            <?php
-                }
-            ?>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
-            
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">

@@ -50,7 +50,7 @@
                         text: '{$mensaje}',
                         confirmButtonText: 'Intentar de nuevo'
                     });
-                } else if ('{$mensaje}' === 'Área/Estado no válidos') {
+                } else {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Advertencia',

@@ -109,40 +109,8 @@
     </div>
 
     <div class="row">
-        <!-- Columna para las tarjetas de descuentos y multas -->
-        <div class="col-lg-4">
-            <!-- Tarjeta de Descuentos -->
-            <div class="card shadow mb-4">
-                <a href="#collapseCardDescuentos" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardDescuentos">
-                    <h6 class="m-0 font-weight-bold text-primary">Roles</h6>
-                </a>
-                <div class="collapse show" id="collapseCardDescuentos">
-                    <div class="card-body">
-                        <input type="text" id="inputTextDescuentos" class="form-control form-control-user" disabled>
-                        <div class="my-2"></div>
-                        <ul class="list-group" id="registroListDescuentos">
-                            <?php
-                                $registros = ["Registro 1", "Registro 2", "Registro 3"];
-                                for ($i = 0; $i < count($registros); $i++) {
-                                    echo '<li class="list-group-item d-flex justify-content-between">' . $registros[$i] . '
-                                        <a href="#" class="btn btn-danger btn-circle btn-sm delete-btn" data-index="' . $i . '" data-list="Descuentos"><i class="fas fa-trash"></i></a>
-                                    </li>';
-                                }
-                            ?>
-                        </ul>
-                        <div class="my-2"></div>
-                        <a href="#" class="btn btn-success btn-icon-split">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span class="text">Split Button Success</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- Columna para los datos de la empresa y directorio telefónico -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <!-- Tarjeta de Datos de la Empresa -->
             <div class="card shadow mb-4">
                 <a href="#collapseCardStatus" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardStatus">
