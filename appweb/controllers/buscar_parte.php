@@ -7,7 +7,7 @@
             $id = $_GET['id'];
 
             // Verificar si el usuario existe
-            $verificar_usuario = "call mostrar_usuario_id(?)";
+            $verificar_usuario = "call mostrar_partes_id(?)";
             if ($stmt_verificar = $conn->prepare($verificar_usuario)) {
                 $stmt_verificar->bind_param("i", $id);
                 $stmt_verificar->execute();
@@ -16,17 +16,10 @@
                 // Si el usuario existe, proceder a obtener los datos
                 if ($stmt_verificar->num_rows > 0) {
                     $stmt_verificar->bind_result(
-                        $id_usuario, 
+                        $id_numero_parte, 
+                        $numero_parte, 
                         $nombre, 
-                        $correo, 
-                        $usuario,
-                        $pwd,
-                        $id_estado, 
-                        $estado,
-                        $id_rol,
-                        $rol,
-                        $id_area,
-                        $area
+                        $id_estado                        
                     );
 
                     // Recuperar los datos del usuario
@@ -34,23 +27,16 @@
 
                     echo json_encode([
                         'success' => true,
-                        'message' => 'Usuario encontrado exitosamente',
+                        'message' => 'Parte encontrado exitosamente',
                         'usuario' => [
-                            'id_usuario' => $id_usuario,
+                            'id_numero_parte' => $id_numero_parte,
+                            'numero_parte' => $numero_parte,
                             'nombre' => $nombre,
-                            'correo' => $correo,
-                            'usuario' => $usuario,
-                            'pwd' => $pwd,
-                            'id_estado' => $id_estado,
-                            'estado' => $estado,
-                            'id_rol' => $id_rol,
-                            'rol' => $rol,
-                            'id_area' => $id_area,
-                            'area' => $area
+                            'id_estado' => $id_estado
                         ]
                     ]);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'El usuario no existe']);
+                    echo json_encode(['success' => false, 'message' => 'La Parte no existe']);
                 }
 
                 // Cerrar la sentencia de verificación
@@ -63,7 +49,7 @@
             // Cerrar la conexión
             $conn->close();
         } else {
-            echo json_encode(['success' => false, 'message' => 'ID de usuario no proporcionado']);
+            echo json_encode(['success' => false, 'message' => 'ID de Parte no proporcionado']);
         }
         exit();
     } catch (Exception $e) {

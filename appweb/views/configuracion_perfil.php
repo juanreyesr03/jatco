@@ -80,11 +80,13 @@
                                         echo "<td class='$estadoClass'; style='text-align: left;'>{$row['estado']}</td>";
                                         echo "<td style='text-align: left;'>";
                                         echo "<a href='#formularioPerfil' class='btn btn-info btn-circle btn-sm' title='Editar' onclick='mostrarFormulario(\"" . $row['id_usuario'] . "\")'><i class='fas fa-info-circle'></i></a> ";
+                                        /*
                                         if($row['id_estado'] == 1){
                                             echo "<a href='#' class='btn btn-danger btn-circle btn-sm' title='Activar' onclick='cambiarEstado(\"" . $row['id_usuario'] . "\", \"" . $row['estado'] . "\")'><i class='fa fa-power-off'></i></a> ";
                                         }else if($row['id_estado'] == 2){
                                             echo "<a href='#' class='btn btn-primary btn-circle btn-sm' title='Desactivar' onclick='cambiarEstado(\"" . $row['id_usuario'] . "\", \"" . $row['estado'] . "\")'><i class='fa fa-power-off'></i></a> ";
                                         }
+                                        */
                                         echo "<a href='#' class='btn btn-danger btn-circle btn-sm' title='Eliminar' onclick='eliminarCliente(\"" . $row['id_usuario'] . "\")'><i class='fas fa-trash'></i></a> ";
                                         echo "</td>";
                                         echo "</tr>";
