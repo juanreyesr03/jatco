@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-02-2025 a las 16:06:50
+-- Tiempo de generación: 10-03-2025 a las 21:09:12
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -56,13 +56,13 @@ CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `eliminar_usuario` (IN `p_id_usuario`
     DELETE FROM configuracion_usuario WHERE id_usuario = p_id_usuario;
 END$$
 
-CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `iniciar_sesion` (IN `p_usuario` VARCHAR(50), IN `p_pwd` VARCHAR(50))   BEGIN
+CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `iniciar_sesion` (IN `p_usuario` VARCHAR(50), IN `p_pwd` VARCHAR(255), IN `p_platform` VARCHAR(50))   BEGIN
     DECLARE v_usuario_existe INT DEFAULT 0;
     DECLARE v_id_usuario INT;
     DECLARE v_nombre_usuario VARCHAR(50);
     DECLARE v_correo VARCHAR(100);
     DECLARE v_usuario VARCHAR(50);
-    DECLARE v_pwd VARCHAR(50);
+    DECLARE v_pwd_hashed VARCHAR(255);
     DECLARE v_id_estado INT;
     DECLARE v_id_estado_descripcion VARCHAR(100);
     DECLARE v_id_rol INT;
@@ -70,71 +70,124 @@ CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `iniciar_sesion` (IN `p_usuario` VARC
     DECLARE v_id_area INT;
     DECLARE v_id_area_descripcion VARCHAR(100);
 
-    -- Comprobamos si el usuario existe
-    SELECT COUNT(*) 
-    INTO v_usuario_existe
+    -- Verificar si el usuario existe y obtener la contraseña
+    SELECT COUNT(*), pwd
+    INTO v_usuario_existe, v_pwd_hashed
     FROM configuracion_usuario 
-    WHERE usuario = p_usuario 
-        AND pwd = p_pwd;
+    WHERE usuario = p_usuario;
 
-    -- Si las credenciales son correctas
+    -- Si el usuario existe
     IF v_usuario_existe > 0 THEN
-        -- Obtenemos los datos del usuario
-        SELECT 
-            usu.id_usuario, 
-            usu.nombre, 
-            usu.correo, 
-            usu.usuario, 
-            usu.pwd, 
-            usu.id_estado, 
-            estado.descripcion, 
-            usu.id_rol, 
-            rol.descripcion, 
-            usu.id_area, 
-            area.descripcion
-        INTO 
-            v_id_usuario, 
-            v_nombre_usuario, 
-            v_correo,
-            v_usuario,
-            v_pwd,
-            v_id_estado, 
-            v_id_estado_descripcion,
-            v_id_rol, 
-            v_id_rol_descripcion,
-            v_id_area, 
-            v_id_area_descripcion
-        FROM 
-            configuracion_usuario usu
-        LEFT JOIN 
-            configuracion_estado estado ON estado.id_estado = usu.id_estado
-        LEFT JOIN 
-            configuracion_usuario_rol rol ON rol.id_rol = usu.id_rol
-        LEFT JOIN 
-            configuracion_estado_area area ON area.id_area = usu.id_area
-        WHERE 
-            usu.usuario = p_usuario 
-            AND usu.pwd = p_pwd
-        LIMIT 1;
+        -- Comparar la contraseña encriptada
+        IF v_pwd_hashed = SHA2(p_pwd, 256) THEN
+            -- Verificar la plataforma
+            IF p_platform = 'mobile' THEN
+                -- Obtener los datos del usuario para la app móvil
+                SELECT 
+                    usu.id_usuario, 
+                    usu.nombre, 
+                    usu.correo, 
+                    usu.usuario, 
+                    usu.id_estado, 
+                    estado.descripcion, 
+                    usu.id_rol, 
+                    rol.descripcion, 
+                    usu.id_area, 
+                    area.descripcion
+                INTO 
+                    v_id_usuario, 
+                    v_nombre_usuario, 
+                    v_correo,
+                    v_usuario,
+                    v_id_estado, 
+                    v_id_estado_descripcion,
+                    v_id_rol, 
+                    v_id_rol_descripcion,
+                    v_id_area, 
+                    v_id_area_descripcion
+                FROM 
+                    configuracion_usuario usu
+                LEFT JOIN 
+                    configuracion_estado estado ON estado.id_estado = usu.id_estado
+                LEFT JOIN 
+                    configuracion_usuario_rol rol ON rol.id_rol = usu.id_rol
+                LEFT JOIN 
+                    configuracion_estado_area area ON area.id_area = usu.id_area
+                WHERE 
+                    usu.usuario = p_usuario
+                LIMIT 1;
 
-        -- Si el usuario está inactivo (id_estado = 2)
-        IF v_id_estado = 2 THEN
-            SELECT 'Usuario inactivo' AS mensaje;
-        -- Si el usuario tiene un rol y área válidos para el acceso
-        ELSEIF v_id_area = 1 AND v_id_rol = 1 THEN
-            SELECT 'Inicio de sesión exitoso' AS mensaje,
-                   v_id_usuario AS id_usuario,
-                   v_nombre_usuario AS nombre,
-                   v_id_rol AS id_rol,
-                   v_id_rol_descripcion AS rol_descripcion,
-                   v_id_estado AS id_estado,
-                   v_id_area AS id_area;
+                -- Verificar estado del usuario
+                IF v_id_estado = 2 THEN
+                    SELECT 'Usuario inactivo' AS mensaje;
+                ELSEIF (v_id_area IN (1, 2) AND v_id_rol IN (1, 2)) THEN
+                    SELECT 'Inicio de sesión exitoso' AS mensaje,
+                           v_id_usuario AS id_usuario,
+                           v_nombre_usuario AS nombre,
+                           v_id_rol AS id_rol,
+                           v_id_rol_descripcion AS rol_descripcion,
+                           v_id_estado AS id_estado,
+                           v_id_area AS id_area;
+                ELSE
+                    SELECT CONCAT('Tu usuario es: ', v_id_area_descripcion, ', no puedes ingresar') AS mensaje;
+                END IF;
+            ELSEIF p_platform = 'web' THEN
+                -- Obtener los datos del usuario para la app web
+                SELECT 
+                    usu.id_usuario, 
+                    usu.nombre, 
+                    usu.correo, 
+                    usu.usuario, 
+                    usu.id_estado, 
+                    estado.descripcion, 
+                    usu.id_rol, 
+                    rol.descripcion, 
+                    usu.id_area, 
+                    area.descripcion
+                INTO 
+                    v_id_usuario, 
+                    v_nombre_usuario, 
+                    v_correo,
+                    v_usuario,
+                    v_id_estado, 
+                    v_id_estado_descripcion,
+                    v_id_rol, 
+                    v_id_rol_descripcion,
+                    v_id_area, 
+                    v_id_area_descripcion
+                FROM 
+                    configuracion_usuario usu
+                LEFT JOIN 
+                    configuracion_estado estado ON estado.id_estado = usu.id_estado
+                LEFT JOIN 
+                    configuracion_usuario_rol rol ON rol.id_rol = usu.id_rol
+                LEFT JOIN 
+                    configuracion_estado_area area ON area.id_area = usu.id_area
+                WHERE 
+                    usu.usuario = p_usuario
+                LIMIT 1;
+
+                -- Verificar estado del usuario
+                IF v_id_estado = 2 THEN
+                    SELECT 'Usuario inactivo' AS mensaje;
+                ELSEIF v_id_area = 1 AND v_id_rol = 1 THEN
+                    SELECT 'Inicio de sesión exitoso' AS mensaje,
+                           v_id_usuario AS id_usuario,
+                           v_nombre_usuario AS nombre,
+                           v_id_rol AS id_rol,
+                           v_id_rol_descripcion AS rol_descripcion,
+                           v_id_estado AS id_estado,
+                           v_id_area AS id_area;
+                ELSE
+                    SELECT CONCAT('Tu usuario es: ', v_id_area_descripcion, ', no puedes ingresar') AS mensaje;
+                END IF;
+            ELSE
+                SELECT 'Acceso solo permitido desde la app móvil o web' AS mensaje;
+            END IF;
         ELSE
-            -- Si el área o el rol no son válidos, mostramos el mensaje con la descripción del área
-            SELECT CONCAT('Tu usuario es: ', v_id_area_descripcion, ', no puedes ingresar') AS mensaje;
+            SELECT 'Credenciales incorrectas' AS mensaje;
         END IF;
     ELSE
-        -- Si las credenciales no coinciden
         SELECT 'Credenciales incorrectas' AS mensaje;
     END IF;
 END$$
@@ -169,7 +222,7 @@ CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `insertar_usuario` (IN `p_nombre` VAR
         p_nombre, 
         p_correo, 
         p_usuario, 
-        p_pwd, 
+        SHA2(p_pwd, 256),  -- Encripta la contraseña con SHA-256
         1, 
         p_id_rol,
         p_id_area
@@ -194,7 +247,6 @@ CREATE DEFINER=`prueba_beta`@`%` PROCEDURE `mostrar_usuarios` ()   BEGIN
 		usu.nombre, 
 		usu.correo, 
 		usu.usuario, 
-		usu.pwd, 
 		usu.id_estado, 
 		estado.descripcion as estado,
 		usu.id_rol, 
@@ -301,7 +353,15 @@ INSERT INTO `configuracion_ingreso` (`fecha`, `ip`, `hora_entrada`, `hora_salida
 ('2025-02-27', '127.0.0.1', '17:49:56', NULL, 'Desktop', 'Juan Meneses Ortega'),
 ('2025-02-27', '127.0.0.1', '18:01:22', NULL, 'Desktop', 'Juan Meneses Ortega'),
 ('2025-02-27', '127.0.0.1', '18:05:10', NULL, 'Desktop', 'Juan Meneses Ortega'),
-('2025-02-27', '127.0.0.1', '18:07:04', NULL, 'Desktop', 'Juan Meneses Ortega');
+('2025-02-27', '127.0.0.1', '18:07:04', NULL, 'Desktop', 'Juan Meneses Ortega'),
+('2025-03-03', '127.0.0.1', '16:44:04', NULL, 'Desktop', 'Juan Meneses Ortega'),
+('2025-03-04', '127.0.0.1', '22:34:47', NULL, 'Desktop', 'Juan Meneses Ortega'),
+('2025-03-04', '127.0.0.1', '22:39:17', NULL, 'Desktop', 'Juan Meneses Ortega'),
+('2025-03-09', '127.0.0.1', '15:23:27', NULL, 'Desktop', 'Juan Meneses Ortega'),
+('2025-03-09', '127.0.0.1', '15:38:48', NULL, 'Desktop', 'Juan Miguel Reyes'),
+('2025-03-09', '127.0.0.1', '15:51:15', NULL, 'Desktop', 'Juan Miguel Reyes'),
+('2025-03-09', '127.0.0.1', '15:51:28', NULL, 'Desktop', 'Juan Miguel Reyes'),
+('2025-03-09', '127.0.0.1', '15:52:35', NULL, 'Desktop', 'Juan Miguel Reyes');
 
 -- --------------------------------------------------------
 
@@ -314,7 +374,7 @@ CREATE TABLE `configuracion_usuario` (
   `nombre` varchar(50) NOT NULL,
   `correo` varchar(50) NOT NULL,
   `usuario` varchar(50) DEFAULT NULL,
-  `pwd` varchar(50) NOT NULL,
+  `pwd` varchar(256) NOT NULL,
   `id_estado` int(11) DEFAULT NULL,
   `id_rol` int(11) DEFAULT NULL,
   `id_area` int(11) NOT NULL
@@ -325,14 +385,8 @@ CREATE TABLE `configuracion_usuario` (
 --
 
 INSERT INTO `configuracion_usuario` (`id_usuario`, `nombre`, `correo`, `usuario`, `pwd`, `id_estado`, `id_rol`, `id_area`) VALUES
-(1, 'Juan Meneses Ortega', 'tsu.juan.meneses@hotmail.com	', 'admin', '1234', 1, 1, 1),
-(4, 'OrestesGaelUwU', 'gael@gmail.com', 'Gael', 'Gael1234', 1, 2, 1),
-(5, 'LORENA MENESES ORTEGA ', 'lorena-meneses.ortega@hotmail.com', 'LORENA ', '1234', 1, 2, 1),
-(6, 'MARISOL', 'MARISOL@GOLDENRED.COM', 'MARISOOL', '1234', 1, 2, 1),
-(7, 'GUADALUPE', 'GUADA@GOLDENRED.COM', 'GUADALUPE312', '1234', 1, 2, 1),
-(13, 'Abigail', 'aby@goldenred.com', 'aby', '12345', 1, 2, 1),
-(14, 'jesus', 'jesusandree@goldenred.com', 'andree', '1234567', 1, 2, 1),
-(15, 'jona', 'jonaarteaga@goldenred.com', 'jona', '123456', 1, 2, 1);
+(20, 'Juan Miguel Reyes', 'juanmiguelreyesrobledo@gmail.com', 'jreyes', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1, 1, 1),
+(21, 'Kassandra Montserrat Hernandez Nava', 'hernandez.montse.18prog@gmail.com', 'montse05', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 1, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -404,7 +458,7 @@ ALTER TABLE `configuracion_estado_area`
 -- AUTO_INCREMENT de la tabla `configuracion_usuario`
 --
 ALTER TABLE `configuracion_usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion_usuario_rol`
