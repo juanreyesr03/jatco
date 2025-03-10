@@ -44,7 +44,6 @@
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Usuario</th>
-                            <th>Contraseña</th>
                             <th>Rol</th>
                             <th>Area</th>
                             <th>Estado</th>
@@ -74,7 +73,6 @@
                                         echo "<td style='text-align: left;'>{$row['nombre']}</td>";
                                         echo "<td style='text-align: left;'>{$row['correo']}</td>";
                                         echo "<td style='text-align: left;'>{$row['usuario']}</td>";
-                                        echo "<td style='text-align: left;'>{$row['pwd']}</td>";
                                         echo "<td style='text-align: left;'>{$row['rol']}</td>";
                                         echo "<td style='text-align: left;'>{$row['area']}</td>";
                                         echo "<td class='$estadoClass'; style='text-align: left;'>{$row['estado']}</td>";

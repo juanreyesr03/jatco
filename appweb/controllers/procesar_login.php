@@ -7,12 +7,13 @@
         $pwd = $_POST['password'];
         $ip = $_POST['ip'];
         $deviceType = $_POST['deviceType'];
+        $p_platform = 'web';
 
 
         // Llamada al procedimiento almacenado
-        $query = "CALL iniciar_sesion(?, ?)";
+        $query = "CALL iniciar_sesion(?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("ss", $usuario, $pwd);
+        $stmt->bind_param("sss", $usuario, $pwd, $p_platform);
         $stmt->execute();
 
         // Obtenemos el resultado

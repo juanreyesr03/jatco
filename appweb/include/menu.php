@@ -57,9 +57,6 @@
             </style>
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../views/dashboard.php">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-cogs"></i>
-                </div>
                 <div class="sidebar-brand-text"><img src="../img/logo.png" alt=""></div>
             </a>
 
