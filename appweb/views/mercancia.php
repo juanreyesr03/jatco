@@ -237,7 +237,7 @@
             confirmButtonText: 'Sí, eliminar'
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch('../controllers/eliminar_usuario.php?id=' + idCliente, {
+                fetch('../controllers/eliminar_parte.php?id=' + idCliente, {
                     method: 'GET'
                 })
                 .then(response => response.json())
