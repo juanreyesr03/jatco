@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-03-2025 a las 00:15:36
+-- Tiempo de generación: 12-03-2025 a las 14:43:01
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -424,7 +424,8 @@ INSERT INTO `configuracion_ingreso` (`fecha`, `ip`, `hora_entrada`, `hora_salida
 ('2025-03-09', '127.0.0.1', '15:51:15', NULL, 'Desktop', 'Juan Miguel Reyes'),
 ('2025-03-09', '127.0.0.1', '15:51:28', NULL, 'Desktop', 'Juan Miguel Reyes'),
 ('2025-03-09', '127.0.0.1', '15:52:35', NULL, 'Desktop', 'Juan Miguel Reyes'),
-('2025-03-11', '127.0.0.1', '11:27:16', NULL, 'Desktop', 'Juan Miguel Reyes');
+('2025-03-11', '127.0.0.1', '11:27:16', NULL, 'Desktop', 'Juan Miguel Reyes'),
+('2025-03-11', '127.0.0.1', '18:05:42', NULL, 'Desktop', 'Juan Miguel Reyes');
 
 -- --------------------------------------------------------
 

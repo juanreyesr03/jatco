@@ -1,7 +1,7 @@
 <?php
     $host = "localhost";
-    $user = "root";
-    $password = "";
+    $user = "jatco_beta";
+    $password = "4f)H.J!7NaaPcSxV";
     $database = "jatco_copia";
 
     date_default_timezone_set('America/Mexico_City');

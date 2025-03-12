@@ -18,28 +18,16 @@
 
                 // Si el usuario existe, proceder a obtener los datos
                 if ($stmt_verificar->num_rows > 0) {
-                    $stmt_verificar->bind_result(
-                        $id_numero_parte, 
-                        $numero_parte, 
-                        $nombre, 
-                        $id_estado                        
-                    );
 
                     // Recuperar los datos del usuario
                     $stmt_verificar->fetch();
 
                     echo json_encode([
                         'success' => true,
-                        'message' => 'Parte encontrado exitosamente',
-                        'usuario' => [
-                            'id_numero_parte' => $id_numero_parte,
-                            'numero_parte' => $numero_parte,
-                            'nombre' => $nombre,
-                            'id_estado' => $id_estado
-                        ]
+                        'message' => 'Número de Parte encontrada con exito'
                     ]);
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'La Parte no existe']);
+                    echo json_encode(['success' => false, 'message' => 'El Número de Parte No Existe']);
                 }
 
                 // Cerrar la sentencia de verificación
@@ -52,7 +40,7 @@
             // Cerrar la conexión
             $conn->close();
         } else {
-            echo json_encode(['success' => false, 'message' => 'ID de Parte no proporcionado']);
+            echo json_encode(['success' => false, 'message' => 'El Número de parte no proporcionado']);
         }
         exit();
     } catch (Exception $e) {
