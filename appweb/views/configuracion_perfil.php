@@ -99,7 +99,7 @@
                                 echo "<tr><td colspan='5' style='text-align: center;'>Error en la consulta: " . $conn->error . "</td></tr>";
                             }
                         } catch (Exception $e) {
-                            echo "<tr><td colspan='5' style='text-align: center;'>Error al cargar clientes: " . $e->getMessage() . "</td></tr>";
+                            echo "<tr><td colspan='5' style='text-align: center;'>Error al cargar Usuarios: " . $e->getMessage() . "</td></tr>";
                         }
                     ?>
                     </tbody>
@@ -601,66 +601,4 @@
             }
         });
     }
-
-    function cambiarEstado(idCliente, idEstado) {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Cambiar Estado del Usuario',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, guardar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Verificar que el idCliente y idEstado no estén vacíos o inválidos
-                if (!idCliente || !idEstado) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Faltan datos',
-                        text: 'Por favor, asegúrate de que los campos de ID y Estado estén correctamente definidos.'
-                    });
-                    return; // Salir si los datos no son válidos
-                }
-
-                // Realizar la solicitud fetch para cambiar el estado
-                fetch(`../controllers/buscar_usuario_estado.php?id=${idCliente}&estado=${idEstado}`, {
-                    method: 'GET'
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Estado actualizado!',
-                            text: 'El estado del usuario ha sido actualizado correctamente.'
-                        }).then(() => {
-                            // Recargar si es necesario o realizar alguna acción posterior
-                            location.reload();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: data.message
-                        });
-                    }
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Hubo un problema al procesar la solicitud: ' + error.message
-                    });
-                });
-            }
-        });
-    }
-
 </script>

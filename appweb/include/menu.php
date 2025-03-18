@@ -75,7 +75,7 @@
             
             <!-- Heading -->
             <div class="sidebar-heading">
-                Mercancia de Proveedor
+                Número de Partes
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -83,12 +83,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#proveedor"
                     aria-expanded="true" aria-controls="proveedor">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Proveedor</span>
+                    <span>Partes</span>
                 </a>
                 <div id="proveedor" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Registrar Codigo:</h6>      
-                        <a class="collapse-item" href="mercancia.php">Registrar Mercancia</a>           
+                        <a class="collapse-item" href="mercancia.php">Registrar</a>           
                     </div>
                 </div>
             </li>
@@ -98,7 +98,7 @@
             
             <!-- Heading -->
             <div class="sidebar-heading">
-                Shutter
+                Racks Registrados
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -106,12 +106,12 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Proveedor</span>
+                    <span>Racks</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Registrar Codigo:</h6>      
-                        <a class="collapse-item" href="mercancia.php">Registrar Mercancia</a>                  
+                        <a class="collapse-item" href="racks.php">Registrar Racks</a>                  
                     </div>
                 </div>
             </li>
